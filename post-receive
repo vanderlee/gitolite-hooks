@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# This file calls other post-receive hooks, making it easier to manage multiple hooks.
+# Change the add_hook statements to change order, add or remove hooks.
+
 LOGFILE=./post-receive.log
 echo "Post-receive at $(date)." >> $LOGFILE
 
