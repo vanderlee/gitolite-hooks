@@ -1,10 +1,13 @@
 #!/bin/sh
 
+# Automatically checkout the repository to a location on your server.
+# Optionally limit the branches which may be deployed.
+#
 # Set GIT_CONFIG_KEYS to '.*' in ~/.gitolite.rc
 # In your gitolite.conf file, configure per repository:
 #  config hooks.deploypath <path> <path> ...
 #   Location(s) to deploy (=checkout) the files.
-#   Empty = do not deploy (default).
+#   Empty = Do not deploy (default).
 #  config hooks.deploybranch <branch> <branch> ...
 #   Names of the branch(es) which may be deployed.
 #   Empty = Deploy any/all changed branches (default).
