@@ -1,13 +1,16 @@
 #!/bin/sh
 
-# Vanuit gitolite.conf, per repo...
-#	config hooks.deploypath <path> <path> ...
-#		Locatie waar naartoe moet worden deployed.
-#		Leeg = geen deployment.
-#	config hooks.deploybranch <branch> <branch> ...
-#		Namen van branches die deployed mogen worden.
-#		Leeg = alle branches.
-#		Voor productie altijd alleen "master" instellen!
+# Set GIT_CONFIG_KEYS to '.*' in ~/.gitolite.rc
+# In your gitolite.conf file, configure per repository:
+#  config hooks.deploypath <path> <path> ...
+#   Location(s) to deploy (=checkout) the files.
+#   Empty = do not deploy (default).
+#  config hooks.deploybranch <branch> <branch> ...
+#   Names of the branch(es) which may be deployed.
+#   Empty = Deploy any/all changed branches (default).
+#   For production environments, you'll probably want "master".
+#   You should probably set this to "master" for repo @all
+# Make sure to run ~/bin/gitolite setup
 
 LOGFILE=./post-receive.log
 
