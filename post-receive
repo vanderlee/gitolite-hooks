@@ -1,0 +1,39 @@
+#!/bin/sh
+
+LOGFILE=./post-receive.log
+echo "Post-receive at $(date)." >> $LOGFILE
+
+log() { printf %s\\n "$*"; }
+warn() { log "WARNING: $@" >&2; }
+
+mydir=${0%/*}
+add_hook() {
+    case $1 in
+        /*) h=$1;;
+        *) h=${mydir}/$1;;
+    esac
+    [ -x "${h}" ] || {
+        warn "ignoring hook '$1' (not executable)"
+        continue
+    }
+    # XXX ${h} must not contain anything in ${IFS}
+    hooks="${hooks} ${h}"
+}
+run_hooks() {
+    # read input from Git, preserving trailing newlines if any
+    input=$(cat && echo eoi)
+    input=${input%eoi}
+
+    for h in ${hooks}; do
+        # no need to break the loop if a hook returns error -- the
+        # exit codes are ignored
+        printf %s "${input}" | "${h}" "$@"
+    done
+}
+
+add_hook post-receive.deploy
+add_hook post-receive.execute
+
+run_hooks "$@"
+
+echo "\n" >> $LOGFILE
