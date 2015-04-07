@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Vanuit gitolite.conf, per repo...
+#	config hooks.deploypath <path> <path> ...
+#		Locatie waar naartoe moet worden deployed.
+#		Leeg = geen deployment.
+#	config hooks.deploybranch <branch> <branch> ...
+#		Namen van branches die deployed mogen worden.
+#		Leeg = alle branches.
+#		Voor productie altijd alleen "master" instellen!
+
+LOGFILE=./post-receive.log
+
+echo "Deploy start." >> $LOGFILE
+
+branches=$(git config --get hooks.deploybranch)
+paths=$(git config --get hooks.deploypath)
+
+if [ -z "$paths" ]; then
+    echo "No paths specified; nothing to deploy."
+    exit 0;
+fi
+
+checkout () {
+	exists=`git show-ref refs/heads/$2`
+	if [ -n "$exists" ]; then
+		git --work-tree=$1 checkout -f $2
+		# chmod a+r -R $1
+		echo "Checked out branch $2 to $1." >> $LOGFILE
+	else
+		echo "Branch $2 does not exist." >> $LOGFILE
+	fi
+}
+
+while read oldrev newrev ref
+do
+    refbranch=`echo $ref | cut -d/ -f3`
+
+    if [ -z "$branches" ]; then
+		for path in $paths; do
+			checkout $path $refbranch
+		done
+    else
+        for branch in $branches; do
+            if [ "$branch" == "$refbranch" ]; then
+				for path in $paths; do
+					checkout $path $refbranch
+				done
+            fi
+        done
+    fi
+done
+
+echo 'Deploy Finished.' >> $LOGFILE
