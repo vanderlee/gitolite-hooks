@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# config hooks.runphp <fully_qualified_path>
+
+LOGFILE=./post-receive.log
+
+echo "Run start." >> $LOGFILE
+
+phpfiles=$(git config --get hooks.runphp)
+
+if [ -z "$phpfiles" ]; then
+	echo "No PHP script(s) to run." >> $LOGFILE
+else
+	php=`which php`
+	for phpfile in $phpfiles; do
+		$php $phpfile
+		echo "Run PHP script $phpfile." >> $LOGFILE
+	done
+fi
+
+echo 'Run Finished.' >> $LOGFILE
