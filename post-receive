@@ -36,6 +36,7 @@ run_hooks() {
 
 add_hook post-receive.deploy
 add_hook post-receive.execute
+add_hook post-receive.nginx
 
 run_hooks "$@"
 
