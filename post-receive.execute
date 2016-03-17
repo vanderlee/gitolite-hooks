@@ -8,7 +8,8 @@
 #  config hooks.runphp <fully_qualified_path>
 #   Fully qualified path to the file to run.
 #   Empty = Do not run any file (default).
-# Make sure to run ~/bin/gitolite setup
+#
+# Make sure to run `~/bin/gitolite setup` or `gl-setup`.
 
 LOGFILE=./post-receive.log
 
