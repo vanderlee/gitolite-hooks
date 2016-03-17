@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Runs an action on service nginx
+# Use this to reload the configuration or restart nginx.
+#
+# Set GIT_CONFIG_KEYS to '.*' in ~/.gitolite.rc
+# In your gitolite.conf file, configure per repository:
+#  config hooks.nginx reload/restart/...
+#   Empty = Do not do anything with nginx.
+#
+# Make sure the gitolite user can run /etc/init.d/nginx.
+# Make sure to run `~/bin/gitolite setup` or `gl-setup`.
+
+LOGFILE=./post-receive.log
+
+action=$(git config --get hooks.nginx)
+
+if [ -n "$action" ]; then
+	echo "Start nginx service action '$action'." >> $LOGFILE
+	sudo /etc/init.d/nginx $action >> $LOGFILE
+	echo "Finish nginx." >> $LOGFILE
+fi
