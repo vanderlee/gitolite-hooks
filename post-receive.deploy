@@ -13,7 +13,8 @@
 #   Empty = Deploy any/all changed branches (default).
 #   For production environments, you'll probably want "master".
 #   You should probably set this to "master" for repo @all
-# Make sure to run ~/bin/gitolite setup
+#
+# Make sure to run `~/bin/gitolite setup` or `gl-setup`.
 
 LOGFILE=./post-receive.log
 
